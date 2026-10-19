@@ -4,7 +4,8 @@ DIR="$HOME/Downloads"
 SOCK=/tmp/mpv-socket
 # formato: episodio:segundo_inicio:duracion
 PLAYLIST=("1:160:16" "2:131:25" "3:1116:10" "1:1337:19")
-OPTS="no-audio sid=2 sub-ass=no sub-font-size=20 sub-color=#FDDA0D sub-bold=yes sub-border-size=1 sub-shadow-color=#000000 sub-shadow-offset=2 sub-margin-y=40 video-margin-ratio-top=0.15 video-margin-ratio-bottom=0.15 osd-on-seek=no input-ipc-server=$SOCK"
+# sid=2 = "Full Subs" (ingles completo); sub-ass=yes usa el estilo original del .mkv
+OPTS="osd-level=0 sub-use-margins=yes sub-ass-force-margins=yes no-audio sid=2 sub-ass=yes sub-ass-override=scale sub-scale=0.6 osd-on-seek=no video-margin-ratio-top=0.15 video-margin-ratio-bottom=0.15 input-ipc-server=$SOCK"
 
 pkill mpvpaper
 rm -f "$SOCK"
@@ -17,6 +18,8 @@ while true; do
     IFS=: read -r ep start dur <<< "$item"
     printf 'loadfile "%s/Ep0%s.mkv"\n' "$DIR" "$ep" | socat - "$SOCK" > /dev/null
     sleep 0.3
+    # mpv vuelve a la pista 1 (solo carteles) en cada archivo nuevo: se re-elige la completa
+    printf 'set sid 2\n' | socat - "$SOCK" > /dev/null
     printf 'seek %s absolute\n' "$start" | socat - "$SOCK" > /dev/null
     sleep "$dur"
   done
