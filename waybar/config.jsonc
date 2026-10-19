@@ -10,8 +10,30 @@
 
 	"modules-left": ["hyprland/workspaces"],
 	"modules-center": ["image#spacebar"],
-	"modules-right": ["custom/random", "cpu", "clock"],
+	"modules-right": ["custom/frases", "backlight", "wireplumber", "cpu", "clock"],
 
+	"custom/frases": {
+		"exec": "/home/bankii/.local/bin/frases.sh",
+		"interval": 30,
+		"format": "{}"
+	},
+
+"wireplumber": {
+"format": "音 {icon} {volume}",
+"format-muted": "音 ×",
+"format-icons": ["▁","▂","▃","▄","▅","▆","▇","█"],
+"scroll-step": 5,
+"max-volume": 100,
+"on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+"tooltip-format": "{node_name}"
+},
+"backlight": {
+"device": "intel_backlight",
+"format": "光 {icon} {percent}",
+"format-icons": ["▁","▂","▃","▄","▅","▆","▇","█"],
+"scroll-step": 5,
+"min-brightness": 5
+},
 	"cpu": {
 		"interval": 10,
 		"format-alt": "󰍛 {usage}%",
